@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from SungrowClient import SungrowClient
+from SungrowClientSalz import SungrowClientSalz
 from version import __version__
 
 import importlib
@@ -116,7 +116,7 @@ def main():
     logging.debug(f'Inverter Config Loaded: {config_inverter}')    
 
     if config_inverter.get('host'):
-        inverter = SungrowClient.SungrowClient(config_inverter)
+        inverter = SungrowClientSalz(config_inverter)
     else:
         logging.error(f"Error: host option in config is required")
         sys.exit("Error: host option in config is required")
@@ -135,7 +135,7 @@ def main():
             try:
                 if export.get('enabled', False):
                     export_load = importlib.import_module("exports." + export.get('name'))
-                    logging.info(f"Loading Export: exports\{export.get('name')}")
+                    # logging.info(f"Loading Export: exports\{export.get('name')}")
                     exports.append(getattr(export_load, "export_" + export.get('name'))())
                     retval = exports[-1].configure(export, inverter)
             except Exception as err:
@@ -151,7 +151,11 @@ def main():
         inverter.checkConnection()
 
         # Scrape the inverter
-        success = inverter.scrape()
+        try:
+            success = inverter.scrape()
+        except Exception as e:
+            logging.exception("Failed to scrape: %s", e)
+            success = False
 
         if(success):
             for export in exports:

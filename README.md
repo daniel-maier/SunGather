@@ -6,6 +6,12 @@
 [![Issues][issues-shield]][issues-url]
 [![GPL3 License][license-shield]][license-url]
 
+## Build Image 
+docker buildx build --platform linux/arm64 --tag salz/sungather:latest .
+
+## Save Image
+docker image save -o sungather-salz.tar salz/sungather:latest
+
 <br />
 <div align="center">
 
