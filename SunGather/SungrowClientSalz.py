@@ -387,22 +387,16 @@ class SungrowClientSalz():
                     self.latest_scrape["minute"],
                     self.latest_scrape["second"],
                 )
-                logging.debug(f'Using Inverter Time: {self.latest_scrape.get("timestamp")}')       
-                del self.latest_scrape["year"]
-                del self.latest_scrape["month"]
-                del self.latest_scrape["day"]
-                del self.latest_scrape["hour"]
-                del self.latest_scrape["minute"]
-                del self.latest_scrape["second"]
+                logging.debug(f'Using Inverter Time: {self.latest_scrape.get("timestamp")}')
+                for key in ['year', 'month', 'day', 'hour', 'minute', 'second']:
+                    if key in self.latest_scrape:
+                        del self.latest_scrape[key]
             except Exception:
                 self.latest_scrape["timestamp"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                logging.warning(f'Failed to get Timestamp from Inverter, using Local Time: {self.latest_scrape.get("timestamp")}')       
-                del self.latest_scrape["year"]
-                del self.latest_scrape["month"]
-                del self.latest_scrape["day"]
-                del self.latest_scrape["hour"]
-                del self.latest_scrape["minute"]
-                del self.latest_scrape["second"]
+                logging.warning(f'Failed to get Timestamp from Inverter, using Local Time: {self.latest_scrape.get("timestamp")}')
+                for key in ['year', 'month', 'day', 'hour', 'minute', 'second']:
+                    if key in self.latest_scrape:
+                        del self.latest_scrape[key]
                 pass
 
         # If alarm state exists then convert to timestamp, otherwise remove it
@@ -415,13 +409,10 @@ class SungrowClientSalz():
                     self.latest_scrape["alarm_time_hour"],
                     self.latest_scrape["alarm_time_minute"],
                     self.latest_scrape["alarm_time_second"],
-                )   
-            del self.latest_scrape["alarm_time_year"]
-            del self.latest_scrape["alarm_time_month"]
-            del self.latest_scrape["alarm_time_day"]
-            del self.latest_scrape["alarm_time_hour"]
-            del self.latest_scrape["alarm_time_minute"]
-            del self.latest_scrape["alarm_time_second"]
+                )
+                for key in ['alarm_time_year', 'alarm_time_month', 'alarm_time_day', 'alarm_time_hour', 'alarm_time_minute', 'alarm_time_second']:
+                    if key in self.latest_scrape:
+                        del self.latest_scrape[key]
         except Exception:
             pass
 
